@@ -1,70 +1,123 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+...
+# Section 6: How to Handle Forms
+## 1.Adding to Array:
+Code:
 
-## Available Scripts
+    const [colors, setColors] = useState([]);   
+    const AddColor = (index) => { 
+        const updateColors = [
+            ...colors.slice( 0, index ),
+            newColor,
+            ...colors.slice( index )
+        ];
+        setColors( updateColors ); 
+    };
 
-In the project directory, you can run:
+### AddColor ref Index of Array
+Code:
 
-### `npm start`
+    const [colors, setColors] = useState([]);  
+    const AddColorAtIndex = (newColor, index) => { 
+        const updateColors = [  --> (1)
+            ...colors.slice( 0, index ),   --> (2)
+            newColor,  --> (3)
+            ...colors.slice( index )  --> (4)
+        ];
+        setColors( updateColors ); 
+    };
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Note:** 
+  - (1): Create a new array
+  - (2): Take everything from start of old array to "index" 
+  - (3): Add a new element
+  - (4): Take everything from "index" to  end
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 2. Removing an element with a particular value
+ Code:
 
-### `npm test`
+    const [colors, setColors] = useState(["red","green","blue"]);
+    const removeColor = (colorToRemove) => { 
+        const updateColors = colors.filter((color) => {  --> (1)
+            return color !== colorToRemove;
+        }); 
+        setColors(updateColors);
+    }; 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Note:** 
+  - (1): "filter" method always returns a new array
 
-### `npm run build`
+**Define:** 
+  - Starting Array     -->    ["red","green","blue"]
+  - Index of the array -->    [ 0  , 1 , 2 ]
+  - Code                      
+        
+        (color, index) => {
+               return color !== "green"; 
+        }
+  - If the Code block is return truthy value? Add element to new array
+  - Returned new array value --> ["red","blue"]       
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### RemoveColor ref Index of Array
+ Code:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    const [colors, setColors] = useState(["red","green","blue"]);
+    const removeColorAtIndex = (indexToRemove) => { 
+        const updateColors = colors.filter((color, index) => {  --> (1)
+            return indexToRemove !== index;  --> (2)
+        }); 
+        setColors(updateColors);
+    }; 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Note:** 
+  - (1): "filter" method always returns a new array
+  - (2): Return "false" when indexToRemove === index and **Finally ;**
+        *If filter function returns true then the value is added to new array
+        *If filter function returns false then the value is not added to new array (removed)  
 
-### `npm run eject`
+Code:
+    
+    const [books, setBooks] = useState([
+        {id: 1 , title: "Title1"},
+        {id: 2 , title: "Title2"}
+    ]);
+    const removeBookById = (id) => {  // -->(1) for (id) 
+        const updateBooks = books.filter( (book) => {
+            return book.id === id;  // -->(2)
+        }); 
+        setBooks(updateBooks);
+    }; 
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Note:** 
+  - (1): Remove books with this id
+  - (2): Return true when this books id is not equal to "id" **FKT:**       **F**ilter **K**eeps **T**rue 
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 3. Modifying an element based on a property
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Code:
+    
 
-## Learn More
+    const [books, setBooks] = useState([
+        {id: 1 , title: "Title1"},
+        {id: 2 , title: "Title2"}
+    ]);
+    const updateBookById = (id, newTitle) => {  // -->( (1),(2))
+        const updateBooks = books.map((book) => {
+            if(book.id === id){  // -->(3)
+                return {...book, title:newTitle };  // -->(4)
+            }
+            return book;  // -->(5)
+        }); 
+        setBooks(updateBooks);
+    }; 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Note:** 
+  - (1): Find an object with this id
+  - (2): Give it is title 
+  - (3): if the book has the id we are looking for ...
+  - (4): Create a new object with the updated title
+  - (5): if it is not the book we are looking for return it as a value
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+*Note: We are using the web site **https://picsum.photos** for static random image* 
